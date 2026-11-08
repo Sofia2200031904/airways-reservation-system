@@ -1,0 +1,45 @@
+package com.airways.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "payments")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @OneToOne
+    @JoinColumn(name = "booking_id", nullable = false)
+    private Booking booking;
+    
+    @Column(nullable = false)
+    private BigDecimal amount;
+    
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+    
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+    
+    @Column(nullable = false)
+    private LocalDateTime paymentDate;
+    
+    private String transactionId;
+    
+    public enum PaymentMethod {
+        CREDIT_CARD, DEBIT_CARD, PAYPAL, NET_BANKING
+    }
+    
+    public enum PaymentStatus {
+        PENDING, COMPLETED, FAILED, REFUNDED
+    }
+}
